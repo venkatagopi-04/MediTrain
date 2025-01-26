@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+         body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            /* Fallback color if the image doesn't load */
+            background-image: url('/static/images/bg6.jpg'); /* Replace with your image path */
+            background-size: cover; /* Ensure the image covers the entire screen */
+            background-repeat: no-repeat; /* Prevents the image from repeating */
+        }
+
+        .logo{
+            display:flex;
+            justify-content: flex-end;
+            margin: 100px 260px;
+        }
+
+        .logo img{
+            width: 400px;
+            height: auto;
+            border: 3px solid blueviolet;
+        }
+
+        .main-card{
+            position: absolute;
+            right: 25px; /* Align to the right */
+            margin-top: 0px;
+            margin-bottom:50px; /* Adjust as needed */
+            background-color: white;
+            border: 5px solid rgb(94, 123, 219); /* Corrected color syntax */
+            border-radius: 15px;
+            width: 1000px;
+            height: 400px;
+        }
+
+        .main-card h2{
+            margin:25px 25px;
+        }
+
+
+        .main-card ul{
+            margin:25px 25px;
+            
+            
+        }
+
+        .main-card li{
+            padding-top:20px;
+            font-size: 1.3rem;
+        }
+/* Position the navigation at the top-right corner */
+nav {
+    position: fixed;
+    top: 235px;  /* Adjust the top margin */
+    right: 40px; /* Adjust the right margin */
+    background-color: transparent; /* Optional, if you want a background */
+    padding: 10px;
+    z-index: 8888;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline-block;
+    border: 2px solid black ;
+    border-radius: 10px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #000; /* Adjust the color as per your design */
+    font-size: 16px; /* Adjust font size */
+    padding: 10px;
+    transition: color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+nav ul li a:hover {
+    color: #007bff; /* Adjust hover color */
+}
+
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+            </ul>
+        </nav>
+    </header>
+
+
+    <div class="logo">
+        <img src="/static/images/lg1.jpg">
+    </div>
+
+    <div class="main-card">
+        <!-- Content inside the card -->
+            <h2>How It Works</h2>
+            <ul>
+                <li><b>Enter Your Symptom: </b>Tell Meditrain what you're feeling, and the AI will categorize your symptom.</li>
+                <li><b>Answer Follow-Up Questions: </b>Based on your input, Meditrain will ask a few more questions to understand your condition better.</li>
+                <li><b>Get Your Diagnosis: </b>After gathering enough information, you'll receive a possible condition, treatment suggestions, and common medications.</li>
+                <li><b>Improves Over Time: </b>Each interaction helps Meditrain get smarter and offer more accurate advice.</li>
+            </ul>
+            
+    </div>
+</body>
+</html>

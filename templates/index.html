@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Virtual Doctor Chatbot</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <link rel="stylesheet" href="/static/styles/style.css">
+   
+</head>
+
+<body>
+  <div class="head">
+    <li><a href="#">Home</a></li>
+    <li><a href="{{ url_for('history') }}">History</a></li>
+
+    <li><a href="{{ url_for('about') }}">About</a></li>
+  </div>
+  <div class="container">
+    <div class="logo">
+      <img src="/static/images/lg1.jpg">
+    </div>
+
+    
+    
+    <div class="form-group">
+  <label for="user_input" class="form-label">Describe your symptoms:</label>
+  <div class="input-group">
+    <input type="text" id="user_input" class="form-control" placeholder="e.g., I have a high fever">
+    <button class="btn btn-primary" onclick="classifySymptom()">
+      <i class="fas fa-paper-plane"></i> <!-- Fancy icon -->
+    </button>
+  </div>
+
+
+    </div>
+    <div id="response"></div>
+    <div id="followup"></div>
+  </div>
+
+  <script>
+    let currentSymptom = ""; // Store the predicted symptom
+    let currentQuestionIndex = 0; // Track the current follow-up question index
+    let userResponses = []; // Store all user responses for follow-up questions
+
+    async function classifySymptom() {
+      const userInput = document.getElementById("user_input").value;
+      const responseDiv = document.getElementById("response");
+      const followupDiv = document.getElementById("followup");
+
+      try {
+        const response = await axios.post("/classify_symptom", { user_input: userInput });
+        const data = response.data;
+
+        currentSymptom = data.predicted_symptom;
+        currentQuestionIndex = 0;
+        userResponses = []; // Reset user responses
+
+        responseDiv.innerHTML = `
+  <div class="card">
+  <p>
+    <strong><i class="fa-solid fa-person-dots-from-line"></i>&nbsp &nbspSymptom:</strong> 
+     <!-- Example icon -->
+    <span class="highlight">${data.predicted_symptom}</span>
+  </p>
+</div>
+        `;
+
+        if (data.followup_questions.length > 0) {
+          followupDiv.innerHTML = `
+            <div class="card">
+              <p><i id="secq" class="fa-solid fa-user-doctor"></i>${data.followup_questions[0]}</p>
+              <div class="input-group">
+                <input type="text" id="followup_input" class="form-control" placeholder="++++++++">
+                <button class="btn btn-primary" onclick="handleFollowup()"><i class="fas fa-paper-plane"></i></button>
+              </div>
+            </div>
+          `;
+        } else {
+          followupDiv.innerHTML = `
+            <div class="card">
+              <p>No follow-up questions available.</p>
+            </div>
+          `;
+        }
+      } catch (error) {
+        responseDiv.innerHTML = `
+          <div class="card">
+            <p class="text-danger">Error: ${error.response?.data.error || error.message}</p>
+          </div>
+        `;
+      }
+    }
+
+    async function handleFollowup() {
+      const userResponse = document.getElementById("followup_input").value;
+      const followupDiv = document.getElementById("followup");
+
+      if (userResponse === "") {
+        followupDiv.innerHTML = `
+          <div class="card">
+            <p class="text-warning">Please provide an answer.</p>
+          </div>
+        `;
+        return;
+      }
+
+      userResponses.push(userResponse);
+
+      try {
+        const response = await axios.post("/handle_followup", {
+          symptom: currentSymptom,
+          user_responses: userResponses,
+          question_index: currentQuestionIndex
+        });
+
+        const data = response.data;
+
+        if (data.is_complete) {
+          const details = data.details;
+          followupDiv.innerHTML = `
+          <div class="card">
+              <p><strong><i class="fa-solid fa-bed-pulse"></i>&nbsp&nbspCondition:</strong> <span class="highlight">${details.condition}</span></p>
+              </div>
+            <div class="card">
+              
+              <p><strong><i class="fa-solid fa-hand-holding-medical" style="font-size: 16px;"></i>&nbsp;&nbsp;Remedies:</strong> ${details.remedies}</p>
+<p><strong><i class="fa-solid fa-book-medical" style="font-size: 16px;"></i>&nbsp;&nbsp;Suggestions:</strong> ${details.suggestions}</p>
+<p><strong><i class="fa-solid fa-capsules" style="font-size: 16px;"></i>&nbsp;&nbsp;Common Tablets:</strong> ${details.common_tablets}</p>
+ </div>
+          `;
+        } else {
+          currentQuestionIndex = data.next_question_index;
+          followupDiv.innerHTML = `
+            <div class="card">
+              <p><i  id="secq" class="fa-solid fa-user-doctor"></i>${data.next_question}</p>
+              <div class="input-group">
+                <input type="text" id="followup_input" class="form-control" placeholder="++++++++">
+                <button class="btn btn-primary" onclick="handleFollowup()"><i class="fas fa-paper-plane"></i></button>
+              </div>
+            </div>
+          `;
+        }
+      } catch (error) {
+        followupDiv.innerHTML = `
+          <div class="card">
+            <p class="text-danger">Error: ${error.response?.data.error || error.message}</p>
+          </div>
+        `;
+      }
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History - User Interactions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="{{ url_for('static', filename='styles/hstyless.css') }}" rel="stylesheet">
+    <style>
+       body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+     /* Fallback color if the image doesn't load */
+    background-image: url('/static/images/bg2.jpg'); /* Replace with your image path */
+    background-size: cover; /* Ensure the image covers the entire screen */
+    background-position: center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+}
+        .history-container {
+            max-width: 1000px;
+            margin: 25px auto;
+            text-align: center;
+            margin-left:250px;
+        }
+        h2 {
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .scroll-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+        }
+        .interaction-card {
+            flex: 0 0 300px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        .interaction-header {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .interaction-details {
+            font-size: 14px;
+            color: #555;
+        }
+        .interaction-footer {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #777;
+        }
+        .btn {
+            color: #007BFF;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .scroll-buttons {
+            margin: 10px 0;
+        }
+        .scroll-btn {
+            padding: 5px 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            margin: 0 5px;
+        }
+        .scroll-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .followup-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .followup-table th, .followup-table td {
+            border: 1px solid #ddd;
+            padding: 5px;
+            text-align: left;
+        }
+        .followup-table th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="history-container">
+        <h2>User Interaction History</h2>
+        <div class="scroll-container">
+            <!-- Cards will be dynamically inserted here -->
+        </div>
+        <div class="scroll-buttons">
+            <button id="scrollLeft" class="scroll-btn">←</button>
+            <button id="scrollRight" class="scroll-btn">→</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async function () {
+            const scrollContainer = document.querySelector('.scroll-container');
+            const scrollLeftBtn = document.getElementById('scrollLeft');
+            const scrollRightBtn = document.getElementById('scrollRight');
+            
+            // Fetch data from the server
+            const response = await fetch('/get_user_interactions');
+            const data = await response.json();
+
+            // Check if there is any data to display
+            if (data.length === 0) {
+                scrollContainer.innerHTML = '<p>No history found.</p>';
+                return;
+            }
+
+            // Dynamically create cards from data
+            data.forEach(interaction => {
+                const card = document.createElement('div');
+                card.classList.add('interaction-card');
+
+                // Generate follow-up questions and answers table
+                let followupContent = '<table class="followup-table"><tr><th>Question</th><th>Answer</th></tr>';
+                const maxLength = Math.max(
+                    interaction.followup_questions.length,
+                    interaction.followup_answers.length
+                );
+                for (let i = 0; i < maxLength; i++) {
+                    const question = interaction.followup_questions[i] || 'N/A';
+                    const answer = interaction.followup_answers[i] || 'N/A';
+                    followupContent += `
+                        <tr>
+                            <td>${question}</td>
+                            <td>${answer}</td>
+                        </tr>
+                    `;
+                }
+                followupContent += '</table>';
+
+                // Populate card content
+                card.innerHTML = `
+                    <div class="interaction-header">
+                        <span>Input: ${interaction.user_input}</span>
+                        <span>Symptom: ${interaction.symptom_class}</span>
+                    </div>
+                    <div class="interaction-details">
+                        <div class="followup-section">
+                            ${followupContent}
+                        </div>
+                        <p><strong>Condition:</strong> ${interaction.probable_condition || 'N/A'}</p>
+                        <p><strong>Remedies:</strong> ${interaction.remedies || 'N/A'}</p>
+                        <p><strong>Suggestions:</strong> ${interaction.suggestions || 'N/A'}</p>
+                        <p><strong>Common Tablets:</strong> ${interaction.common_tablets || 'N/A'}</p>
+                    </div>
+                    <div class="interaction-footer">
+                        
+                        <span>${new Date(interaction.timestamp).toLocaleString()}</span>
+                    </div>
+                `;
+                scrollContainer.appendChild(card);
+            });
+
+            // Scroll functionality
+            const cards = document.querySelectorAll('.interaction-card');
+            const cardWidth = cards[0]?.offsetWidth || 300; // Assume 300px width if no cards loaded
+            let currentScroll = 0;
+
+            scrollLeftBtn.addEventListener('click', () => {
+                currentScroll -= cardWidth * 2; // Move left by 2 cards
+                if (currentScroll < 0) currentScroll = 0;
+                scrollContainer.scrollTo({
+                    left: currentScroll,
+                    behavior: 'smooth',
+                });
+            });
+
+            scrollRightBtn.addEventListener('click', () => {
+                currentScroll += cardWidth * 2; // Move right by 2 cards
+                const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+                if (currentScroll > maxScroll) currentScroll = maxScroll;
+                scrollContainer.scrollTo({
+                    left: currentScroll,
+                    behavior: 'smooth',
+                });
+            });
+        });
+    </script>
+</body>
+</html>
