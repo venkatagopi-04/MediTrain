@@ -1,0 +1,235 @@
+/* Body Styling */
+body {
+    background-image: url('/static/images/bg1.jpg'); /* Adjust the path to your image */
+    background-size: cover; /* Ensures the image covers the entire background */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+    background-position: center; /* Centers the image */
+    font-family: 'Arial', sans-serif;
+    color: #343a40;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh; /* Ensures the body is at least the height of the viewport */
+    display: flex;
+    justify-content: flex-end; /* Align container to the right */
+    align-items: flex-start; /* Align container to the top */
+    position: relative;
+  }
+  
+  
+  /* Main Container */
+  .container {
+    max-width: 800px;
+    margin: 6rem 2rem; /* Spacing from edges */
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1s ease-in-out; /* Add entry animation */
+  }
+  
+  /* Heading */
+  h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #007bff;
+    animation: slideDown 1s ease; /* Add slide-down animation */
+  }
+  
+  /* Logo */
+  .logo {
+    display: flex;
+    justify-content: flex-start; /* Align logo to the left */
+    align-items: center; /* Vertically center the image */
+    margin: 10px 0 30px 0;
+    max-width: 300px;
+  }
+  
+  .logo img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .logo img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Form Group */
+  .form-group {
+    margin-bottom: 1.5rem;
+    padding: 1rem; /* Add inner spacing for better layout */
+    border: 3px solid transparent; /* Base for the gradient */
+    border-image: linear-gradient(45deg, #ff9a9e, #fad0c4, #fbc2eb); /* Gradient border colors */
+    border-image-slice: 1; /* Ensure gradient fills the border */
+    border-radius: 10px; /* Add rounded corners */
+    background: #ffffff;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .form-group:hover {
+    border: 3px solid transparent; /* Base for the gradient */
+    border-image: linear-gradient(45deg, #ff9a9e, #fad0c4, #fbc2eb); /* Gradient border colors */
+    border-image-slice: 1; /* Ensure gradient fills the border */
+    border-radius: 10px; /* Add rounded corners */
+    
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+  }
+  
+  /* Buttons */
+  .btn-primary {
+    background-color: #007bff;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .btn-primary:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Cards */
+  /* Card Styling */
+/* Highlight Text */
+.highlight {
+    font-weight: bold;
+    color: #1e90ff; /* A nice blue color */
+    font-size: 1.25rem; /* Slightly larger font for emphasis */
+    text-transform: uppercase; /* Optional: Make text uppercase */
+    background: none; /* No background for clear text */
+    
+  }
+  
+  /* Animation for Highlight Text (Blue Glow Effect) */
+  
+  
+  /* Card Styling */
+  .card {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* General Text Styling */
+  .card p {
+    font-size: 1.2rem;
+    line-height: 1.5;
+    color: #333;
+    margin: 0;
+  }
+  /* Styling the icon */
+.card p i {
+    margin-right: 10px; /* Space between the icon and the text */
+    font-size: 2.5rem; /* Adjust icon size */
+    color: #1e90ff; /* You can match the color with the text color */
+    vertical-align: middle; /* Aligns icon with the text */
+  }
+  
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+
+
+  #followup_input {
+    position: relative;
+    padding-left: 30px; /* Space for the icon */
+  }
+  
+  #followup_input::placeholder {
+    color: #aaa;
+    font-size: 16px;
+    font-style: italic;
+  }
+  
+  #followup_input:focus::placeholder {
+    color: transparent; /* Hide placeholder text when focused */
+  }
+  
+  #secq{
+    margin-right: 10px; /* Space between the icon and the text */
+    font-size: 1.5rem; /* Adjust icon size */
+    color: #1e90ff; /* You can match the color with the text color */
+    vertical-align: middle; /* Aligns icon with the text */
+  }
+
+  .head {
+    display: flex;
+    gap: 10px; /* Adds space between the items */
+    background-color: rgba(0, 0, 0, 0.0); /* 0.3 opacity black background */
+    padding: 10px; /* Adds padding around the list items */
+    border-radius: 8px; /* Adds rounded corners to the background */
+    position: absolute; /* Positions the menu relative to the page */
+    right: 600px; /* Moves the menu 10px from the right edge */
+    top: 20px; /* Moves the menu 20px from the top */
+  }
+  
+  .head li {
+    list-style: none;
+    color: rgb(250, 11, 11);
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+    position: relative; /* Required for the ::after element */
+  }
+  
+  .head li::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    width: 0%;
+    background-color: rgb(250, 11, 11); /* Matches the text color */
+    transition: width 0.3s ease-in-out; /* Smooth animation */
+  }
+  
+  .head li:hover::after {
+    width: 100%; /* Expands the underline on hover */
+  }
+  
+  .head a{
+    text-decoration:none;
+  }

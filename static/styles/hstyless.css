@@ -1,0 +1,120 @@
+/* Base Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.history-container {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 1200px;
+    padding: 30px;
+    overflow: hidden;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+.history-container h2 {
+    text-align: center;
+    color: #6831b6;
+    margin-bottom: 30px;
+}
+
+.scroll-container {
+    display: flex;
+    overflow-x: scroll; /* Allow horizontal scrolling */
+    scroll-behavior: smooth; /* Smooth scrolling effect */
+    width: 100%;
+    height: calc(100% - 100px); /* Adjust height to fit content */
+    padding-bottom: 10px;
+}
+
+.scroll-container .interaction-card {
+    background-color: #e8f4f8;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    flex: 0 0 calc(50% - 20px); /* Show two cards per row */
+    margin-right: 20px;
+    transform: scale(1);
+    transition: transform 0.3s ease;
+}
+
+.interaction-card:hover {
+    transform: scale(1.05);
+}
+
+.scroll-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.scroll-btn {
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.scroll-btn:hover {
+    background-color: #2980b9;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+/* Position the navigation at the top-right corner */
+nav {
+    position: fixed;
+    top: 60px;  /* Adjust the top margin */
+    right: 250px; /* Adjust the right margin */
+    background-color: transparent; /* Optional, if you want a background */
+    padding: 10px;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline-block;
+    border: 2px solid black ;
+    border-radius: 10px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #000; /* Adjust the color as per your design */
+    font-size: 16px; /* Adjust font size */
+    padding: 10px;
+    transition: color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+nav ul li a:hover {
+    color: #007bff; /* Adjust hover color */
+}
